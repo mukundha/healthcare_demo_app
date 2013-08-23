@@ -1,0 +1,388 @@
+<html>
+<head>
+	<title>Leaflet Quick Start Guide Example</title>
+	<meta charset="utf-8" />
+
+	<meta name="viewport" content="width=device-width, height=device-height,initial-scale=1.0,maximum-scale=1.0">
+
+	<link rel="stylesheet" href="css/blue.css" />	
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile.structure-1.3.1.min.css" />
+	<!-- <link rel="stylesheet" href="css/jquery.mobile.min.css" /> -->
+	<link rel="stylesheet" href="css/leaflet.css" />
+	<link rel="stylesheet" href="css/app.css" />
+	<style>
+		#tags-cloud,#flot_piechart {
+			width: 350px;
+			height: 500px;
+		}
+		#piechart {
+			width: 350px;
+			height: 500px;
+		}
+	</style>
+	<script src='cordova.js'></script>
+	<script src='cordova_plugins.js'></script>
+	<script src='js/PushNotification.js'></script>
+
+	<!-- <script type="text/javascript" src="cordova-2.6.0.js"></script>
+	<script type="text/javascript" src="PushNotification.js"></script> -->
+	
+	<script src="js/jquery.min.js"></script>
+	<script src="js/leaflet.js"></script>
+	
+	<script src='js/jquery.flot.js'></script>
+	<script src='js/jquery.flot.pie.js'></script>
+	<script src="js/jquery.tagcloud.js"></script>
+	<script src='js/apigee.min.js'></script>
+	<script src="js/app.js"></script>
+	<script src="js/jquery.mobile.min.js"></script>
+	
+	
+</head>
+
+<body>
+	<div data-role='page' id='page-login' data-theme='a'>
+		<div data-role='header'>
+			<img src='img/hm-banner-healthcare.jpg' style="width:100%;height:150px"></img>
+		</div>
+		<div data-role='content' >
+			
+			<div data-role="fieldcontain">
+	            <input name="" id="input-username" placeholder="Username" value="" type="text" data-theme='b'>
+	        </div>
+	        <div data-role="fieldcontain">
+	            <input name="" id="input-password" placeholder="Password" value="" type="password" data-theme='b'>
+	        </div>
+	        <input id="btn-login" type="submit" data-icon="check" data-iconpos="left"
+	        value="Submit">
+		</div>
+		<div data-role="footer">
+		</div>
+	</div>
+	<div data-role="page" id="page-first" data-theme='b'>
+		<div data-role="header">
+			<h2>Welcome</h2>
+			<a href='#page-login'  data-role="button" data-icon="refresh" class="ui-btn-right">SignOut</a>
+		</div>
+		<div data-role="content">
+			<div class="ui-grid-a">
+				<div class="ui-block-a"><a href="#" id='btn-find-doctor'><img align="middle" class='home_page_image' src='img/find_doctor_250x250.png'></img></a></div>
+				<div class="ui-block-b"><a href="#" id='btn-claims-process'><img align="middle" class='home_page_image' src='img/claims_250x250.png'></img></a></div>
+				<!-- 
+				-->
+				<div class="ui-block-a"><a href="#" id='btn-events'><img align="middle" class='home_page_image' src='img/events_250x250.png'></img></a></div>
+				<div class="ui-block-b"><a href="#"><img align="middle" class='home_page_image' src='img/walking_legs_250x250.png'></img></a></div>
+				<div class="ui-block-a"><a href="#page-myprofile"><img align="middle"  class='home_page_image' src='img/profile_icon1_250x250.png'></img></a></div>
+				<div class="ui-block-b"><a href="#" id='btn-friends'><img align="middle" class='home_page_image' src='img/friends_icon.png'></img></a></div> 					   
+			</div>
+		</div>
+		<div data-role="footer">
+		<!-- <h2>Powered by Apigee</h2> -->
+		</div>
+	</div>
+	<div data-role="page" id='page-home'>
+		<div data-role='header' id='header-location'>
+			<h2>Be Well</h2>
+			<!-- <div data-role="navbar">
+            <ul>
+            	<li><a href="#page-myfeed" id='btn-feed' data-icon="grid" class="ui-btn-active">My Feed</a></li>
+                <li><a href="#page-home" id='btn-location' data-icon="grid" class="ui-btn-active">Location</a></li>
+                <li><a href="#page-flot-chart" id='btn-skills' data-icon="star">Skills</a></li>
+                <li><a href="#page-tag-cloud" id='btn-titles' data-icon="gear">Titles</a></li>
+                <li><a href="#" class='btn-recommended' data-icon="gear">Recommended</a></li>
+            </ul>
+        	</div> -->
+		</div>
+		<div data-role="panel" id="panel-location-top-jobs">
+			<div data-role='header'>
+				<h2></h2>
+			</div>
+    		<ul data-role="listview">
+    			<li><a>Chennai</a></li>
+    			<li><a>Hyderabad</a></li>
+    			<li><a>Mumbai</a></li>
+    			<li><a>Pune</a></li>
+    			<li><a>New Delhi</a></li>
+    		</ul>	
+		</div><!-- /panel -->
+		<div data-role='content' data-theme='a'>
+			<div id='map'>
+			</div>
+			<div>
+				<ul id='list-map-users' data-role='listview'>
+					<li><a href='#'>Your Friends</a></li>
+					<li><a href='#'>Active Users</a></li>
+				</ul>
+			</div>	
+		</div>
+		<div data-role='footer'>
+			
+		</div>	
+	</div>	
+	<div data-role="page" id="page-events" data-theme='b'>
+		<div data-role="header">
+			<h2>Events</h2>
+			<a href="#page-first" data-role="button" data-icon="home" class="ui-btn-left">Home</a>
+		</div>
+		<div data-role="content" id='content-events'>
+			
+			<!-- template -->
+			<!--  
+			<div data-role="collapsible" data-theme="b" data-content-theme="d"  data-collapsed="false" data-collapsed-icon="arrow-d" data-expanded-icon="arrow-u">
+				<h1 align='center'>Half Marathon Palo Alto</h1>
+				<ul data-role='listview'>
+						<li>
+						<img src="img/marathon.jpg" style="width:100%;height:150px"/>
+						<a href='#'></a>
+						<div class="ui-grid-b">
+							<div class="ui-block-a" align='center'>Members</div>
+							<div class="ui-block-b" align='center'>Registration</div>
+							<div class="ui-block-c" align='center'>Cycling</div>
+							<div class="ui-block-a">
+									<div class="ui-bar ui-bar-e event_block" align='center'>
+						    		
+						    		<h1>5000</h1>
+									</div>
+							</div>
+						    <div class="ui-block-b">
+						    	<div class="ui-bar ui-bar-e event_block" align='center'>
+						    		<h1>29 Aug 13</h1>
+						    	</div>
+						    </div>
+						    <div class="ui-block-c">
+						    	<div class="ui-bar ui-bar-e event_block" align='center'>
+						    		<h1>Palo Alto</h1>
+						    	</div>
+						    </div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			-->
+		</div>	
+		<div data-role="footer"></div>
+	</div>
+	<div data-role="page" id="page-event-details" data-theme='a'>
+		<div data-role='header'>
+			<h2>Find Doctor</h2>
+			<a href='#panel-event-details' id='btn-show-event-details-panel'  data-role="button" data-icon='bars'>Details</a>
+			<a href='#page-first'  data-role="button"  data-icon='home'>Home</a>
+			<img src="" id='img-event-details' style="width:100%;height:150px"/>
+		</div>
+		
+		<div data-role='content' id='content-event-details'>
+				<h1 id='label-title-content' align='center'></h1>
+				<ul data-role='listview'>
+					<li><a href='#' id='btn-event-register' eventid=''>Register</a></li>
+					<li>Recent Activities</li>
+					<li></li>
+				</ul>
+				
+				<ul data-role="listview" id='list-event-feed' data-inset="false">
+					<!-- template -->
+				    <!-- <li>
+				        <img src="http://demos.apigee.net/retail/cdn/images/Users/rick.png">
+				        <h2>Rick</h2>
+				        <p>joined the group</p>
+				    </li>
+				    <li>
+				        <img src="http://demos.apigee.net/retail/cdn/images/Users/charlie.png">
+				        <h2>Charlie</h2>
+				        <p>joined the group</p>
+				    </li>
+				    <li>
+				        <img src="http://demos.apigee.net/retail/cdn/images/Users/oliver.png">
+				        <h2>Oliver</h2>
+				        <p>joined the group</p>
+				    </li> -->
+				</ul>
+
+			</div>
+			
+		<div data-role='panel' id='panel-event-details' data-theme='a'>
+				<div class="ui-grid-solo"><div class="ui-block-a" align='center'><h1 id='label-event-title'></h1></div></div>
+				<div class="ui-grid-solo"><div class="ui-block-a" align='center'>Members</div></div>
+				<div class="ui-grid-solo">
+					<div class="ui-block-a ui-bar ui-bar-e event_block" align='center'>
+			    		<h1 id='label-event-members'>740</h1>
+					</div>
+				</div>
+				
+				<div class="ui-grid-solo"><div class="ui-block-a" align='center'>Registration</div></div>
+				<div class="ui-grid-solo">
+					<div class="ui-block-a ui-bar ui-bar-e event_block" align='center'>
+						   <h1 id='label-event-date'>31 Jul 13</h1>
+					</div>
+				</div>
+
+				<div class="ui-grid-solo"><div class="ui-block-a" align='center'>Location</div></div>
+				<div class="ui-grid-solo">
+				  	<div class="ui-block-a ui-bar ui-bar-e event_block" align='center'>		    		
+						   <h1 id='label-event-city'>Palo Alto</h1>
+					</div>
+				</div>		    	
+		</div>	
+	</div>	
+	
+	<div data-role="page" id='page-find-doctor'>
+		<div data-role='header'>
+			<h2>Find Doctor</h2>
+			<a href='#' id='btn-show-doctor-categories' data-role="button" data-icon='bars'>Category</a>
+			<a href='#page-first'  data-role="button"  data-icon='home'>Home</a>
+		</div>
+		<div data-role="panel" id='panel-doctor-categories' data-theme='a'>
+			<div>
+				<h3>Speciality</h3>
+			</div>
+			<ul data-role="listview">
+				<li><a href="#"
+					data-specialty="1214">Allergy and Immunology</a></li>
+				<li><a href="#" data-specialty="249">Cardiology</a></li>
+				<li><a href="#" data-specialty="1295">Dentistry</a></li>
+				<li><a href="#" data-specialty="256">Dermatology</a></li>
+				<li><a
+					href="#"
+					data-specialty="1240">Diabetes, Endocrinology and Metabolism</a></li>
+				<li><a href="#"
+					data-specialty="1204">Ear, Nose, and Throat (ENT)</a></li>
+				<li><a href="#"
+					data-specialty="1196">Family Practice</a></li>
+				<li><a href="#" data-specialty="602">Nephrology</a></li>
+				<li><a href="#" data-specialty="273">Neurology</a></li>
+				<li><a href="#"
+					data-specialty="1193">Obstetrics and Gynecology</a></li>
+				<li><a href="#" data-specialty="197">Ophthalmology</a></li>
+				<li><a href="#"
+					data-specialty="191">Orthopedic Surgery</a></li>
+				<li><a href="#" data-specialty="365">Pediatrics</a></li>
+				<li><a href="#" data-specialty="456">Plastic
+						Surgery</a></li>
+				<li><a href="#" data-specialty="202">Psychiatry</a></li>
+				<li><a href="#" data-specialty="1302">Spine
+						Surgery</a></li>
+			</ul>
+		</div>
+		<div data-role="panel" id='panel-doctor-details' data-position="right" data-display="push" data-theme='a'>
+				
+				<h2 id='label-doctor-name'>Dr. KIM V LE, MD</h2>
+				<div class="ui-grid-a">
+					<div class="ui-block-a">
+						<a href="#page-home">
+						<img align="middle" id='img-doctor'
+						 src='https://www.itriagehealth.com/https_image_proxy?url=http%3A%2F%2Fs3.amazonaws.com%2Fitriage%2Flogos%2F15424%2Fdesktop_list.jpeg%3F1331885240'></img></a>
+					</div>
+					<div class="ui-block-b">
+						<p id='label-speciality'>Internal Medicine and Pediatrics<p>
+					</div>
+				</div>
+					<p></p>
+					<ul data-role='listview'>
+							<li><a href='#' id='label-tagline'>Sutter Medical Network<br>Palo
+									Alto Medical Foundation
+								</a>
+							</li>
+							<li><a href='#' id='label-distance'>8.2 miles</a></li>
+							<li><a href='tel:650-123-4577' id='label-phone'>650-123-4577</a></li>
+					</ul>
+					<h1>  </h1>	
+					<a href='#' data-role='button'>
+							Book an Appointment
+					</a>
+				
+			
+		</div>
+		<div data-role='content' id='content-doctors' data-theme='a'>
+			<div id='doctors_map'>
+			</div>
+		</div>
+		<div data-role='footer'>
+			
+		</div>	
+		
+	</div>
+	
+	<div data-role='page' id='page-users'>
+		<div data-role='content'>
+			<img class="a1 user" width="1" height="1" />
+			<img class="a2 user"  width="1" height="1" />
+			<img class="a3 user" width="1" height="1" />
+			<img class="a4 user" width="1" height="1" />
+			<img class="a5 user" width="1" height="1" />
+		</div>
+	</div>	
+	
+	<div data-role='page' id='page-users'>
+		<div data-role='header'>
+			<h2>Feed</h2>
+			<a href='#'  data-role="button" data-direction="reverse" data-rel="back" data-icon='back'>Back</a>
+			<a href='#page-first'  data-role="button" data-icon='home'>Home</a>
+		</div>
+		<div data-role='content'>
+			<ul data-role='listview' data-inset='false' id='list-friends-feed'>
+				
+			</ul>
+		</div>
+	</div>
+	<div data-role='page' id='page-claims'>
+		<div data-role="header">
+			<h2>Upload your claim</h2>
+			<a href='#page-first' data-role="button" data-icon="delete" class="ui-btn-left">Cancel</a>
+		</div>
+		<div data-role='content'>
+			<img id='img-claim' src=''></img>
+			<textarea rows="10" id='txt-claims' placeholder="Comments"></textarea>
+			<a href='#' id='btn-submit-claim' data-role="button">Upload Claim</a>
+		</div>
+	</div>
+	<div data-role='page' id='page-myprofile'>
+		<div data-role="header">
+			<h2>Notifications</h2>
+			<a href='#page-first' data-role="button" data-icon="home" class="ui-btn-left">Home</a>
+		</div>
+		<div data-role='content'>
+			<ul data-role="listview" data-inset="false">
+				    <li data-role="list-divider">Thursday, Aug 1, 2013 <span class="ui-li-count">2</span></li>
+				    <li><a href="#">
+				        <h2>5% Off on your Prescription Refill at Wallgreens</h2>
+				        <p><strong>Now Avail 5% Off for you prescription refill at Wallgreens, Palo Alto</strong></p>
+				        <p>Hey Oliver, New offer just for you on prescription refill at Wallgreens in Palo Alto, this offer is valid until 31st Aug 2013</p>
+				        <p class="ui-li-aside"><strong>6:24</strong>PM</p>
+				    </a></li>
+				    <li><a href="#">
+				        <h2>You claim updated</h2>
+				        <p><strong>Admin has requested for information on your claim</strong></p>
+				        <p>Hello Oliver, Admin has requested more details for the claim you raised for your healthcare expenses. Kindlt provide the requested information at the earliest.</p>
+				        <p class="ui-li-aside"><strong>9:18</strong>AM</p>
+				    </a></li>
+				    <li data-role="list-divider">Monday, Jul 29, 2013 <span class="ui-li-count">1</span></li>
+				    <li><a href="#">
+				        <h2>Schedule you healthcheck this Weekend</h2>
+				        <p><strong>Click here to book for your free annual health checkup this weekend</strong></p>
+				        <p>Hello Oliver, We are happy to let you know that we have a slot for health checkup at the nearby hospital, kindly register to confirm your schedule </p>
+				        <p class="ui-li-aside"><strong>4:48</strong>PM</p>
+				    </a></li>
+				    <li data-role="list-divider">Monday, Jul 15, 2013 <span class="ui-li-count">1</span></li>
+				    <li>
+				    	<a href='#'>
+				    	<h2>Schedule you healthcheck this Weekend</h2>
+				        <p><strong>Click here to book for your free annual health checkup this weekend</strong></p>
+				        <p>Hello Oliver, We are happy to let you know that we have a slot for health checkup at the nearby hospital, kindly register to confirm your schedule </p>
+				        <p class="ui-li-aside"><strong>4:48</strong>PM</p>
+				    	</a>
+				    </li> 
+				    <li data-role="list-divider">Saturday, Jul 6, 2013 <span class="ui-li-count">1</span></li>
+				    <li>
+				    	<a href='#'>
+				    	<h2>Your claim submitted</h2>
+				        <p><strong>Just to confirm that your claim is received by us</strong></p>
+				        <p>Hello Oliver, We have received your claim, we will process it and let know the status with in 2 weeks</p>
+				        <p class="ui-li-aside"><strong>12.45</strong>PM</p>
+				    	</a>
+				    </li> 
+			</ul>
+		</div>
+	</div>
+	
+		
+</body>
+</html>

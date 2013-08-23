@@ -1,0 +1,61 @@
+var options = {
+        orgName:'<apigee appservices org>', // Your Apigee.com username for App Services
+        appName:'<app name>', // Your Apigee App Services app name
+        buildCurl:true,
+        logging:true
+ }
+var client = new Apigee.Client(options);
+
+
+var pushNotification = window.plugins.pushNotification;		
+
+//For Android
+pushNotification.register(successHandler, errorHandler,{"senderID":"<your sender id>","ecb":"onNotificationGCM"});
+
+function onNotificationGCM (event){
+	console.log(JSON.stringify(event));
+	if ( event.event == 'registered'){
+		var options = {notifier:'google',deviceToken:event.regid};
+		client.registerDevice(options,function(err,res){
+			console.log('device registration done');
+			console.log(JSON.stringify(res));
+		});
+	}else if ( event.event == 'message'){
+		navigator.notification.alert(event.payload.data);
+	}
+}
+
+//For iOS
+function tokenHandler(result) {
+    console.log("Device Registration Result =" +  result);
+    
+    var options = {notifier:'apple',deviceToken:result};
+    client.registerDevice(options,function(res){
+                          console.log('device registration done');
+                          console.log(res);
+                          });
+}
+
+function onNotificationAPN(event){
+    console.log('Event received');
+    console.log(event);
+    if (event.alert) {
+        navigator.notification.alert(event.alert);
+    }
+    if (event.badge) {
+        pushNotification.setApplicationIconBadgeNumber(successHandler, errorHandler, event.badge);
+    }
+}
+
+
+
+
+
+function successHandler(result){
+		console.log(JSON.stringify(result));
+}
+
+
+function errorHandler (err){
+		console.log(err);
+}
